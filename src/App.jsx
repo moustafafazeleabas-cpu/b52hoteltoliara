@@ -316,7 +316,7 @@ export default function HotelVitrine() {
           </div>
 
           <a 
-            href="https://www.facebook.com/profile.php?id=61567330162876" 
+            href="https://www.facebook.com/tulear.hoteltulear" 
             target="_blank" 
             rel="noreferrer"
             className="inline-flex items-center justify-center gap-2 text-sm font-bold uppercase tracking-widest text-orange-500 hover:text-white transition-colors border border-orange-500 hover:bg-orange-500 px-6 py-2 rounded-full"
