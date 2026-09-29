@@ -36,8 +36,12 @@ export default function HotelVitrine() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center">
-            <img src="/logo.jpg" alt="Logo Hôtel B52" className="h-12 w-auto object-contain" />
+         <div className="flex items-center">
+            <img 
+              src="/logo.jpg" 
+              alt="Logo Hôtel B52" 
+              className="h-20 md:h-28 w-auto object-contain" 
+            />
           </div>
 
           {/* Menu Desktop */}
