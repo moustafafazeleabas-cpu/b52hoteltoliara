@@ -36,8 +36,8 @@ export default function HotelVitrine() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="text-2xl tracking-[0.2em] font-light uppercase text-orange-600">
-            Hôtel <span className="font-bold">B52</span>
+          <div className="flex items-center">
+            <img src="/logo.jpg" alt="Logo Hôtel B52" className="h-12 w-auto object-contain" />
           </div>
 
           {/* Menu Desktop */}
@@ -368,8 +368,8 @@ export default function HotelVitrine() {
       {/* --- FOOTER --- */}
       <footer className="bg-gray-900 pt-16 pb-8 border-t-8 border-orange-500 text-center">
         <div className="max-w-4xl mx-auto px-6 mb-10">
-          <div className="text-3xl tracking-[0.2em] font-light uppercase text-white mb-8">
-            Hôtel <span className="font-black text-orange-500">B52</span>
+          <div className="flex justify-center mb-8">
+            <img src="/logo.jpg" alt="Logo Hôtel B52" className="h-20 w-auto object-contain bg-white rounded-xl p-2" />
           </div>
           
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-gray-400 text-sm font-medium mb-8">
