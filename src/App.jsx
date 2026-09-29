@@ -205,7 +205,7 @@ export default function HotelVitrine() {
         </div>
       </section>
 
-      {/* --- RÉSERVATION (FORMULAIRE) --- */}
+    {/* --- RÉSERVATION (FORMULAIRE AJAX) --- */}
       <section id="reservation" className="py-24 md:py-32 max-w-3xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-black uppercase tracking-widest text-gray-900 mb-4">Demande de Réservation</h2>
@@ -215,8 +215,71 @@ export default function HotelVitrine() {
           </p>
         </div>
 
-        <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-xl border border-gray-100">
-          <form action="https://formsubmit.co/moustafafazeleabas@gmail.com" method="POST" className="space-y-6">
+        <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-xl border border-gray-100 relative">
+          
+          {/* L'état de l'envoi (Message de succès) */}
+          <div id="successMessage" className="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-10 flex flex-col items-center justify-center rounded-[2rem] p-8 text-center animate-in fade-in zoom-in duration-500">
+            <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-6 shadow-inner">
+              <svg width="40" height="40" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                <path d="M20 6L9 17l-5-5"></path>
+              </svg>
+            </div>
+            <h3 className="text-2xl font-black text-gray-900 mb-3">Votre demande est bien envoyée !</h3>
+            <p className="text-gray-600 font-medium text-lg">Nous vous répondrons dans les plus brefs délais sur votre adresse e-mail.</p>
+            <button 
+              onClick={() => {
+                document.getElementById('successMessage').classList.add('hidden');
+                document.getElementById('reservationForm').reset();
+              }}
+              className="mt-8 text-sm font-bold text-orange-500 uppercase tracking-widest hover:text-orange-700 transition"
+            >
+              ← Faire une autre demande
+            </button>
+          </div>
+
+          <form 
+            id="reservationForm"
+            onSubmit={(e) => {
+              e.preventDefault(); // Empêche le rechargement de la page et la redirection
+              const form = e.target;
+              const bouton = document.getElementById('submitBtn');
+              const texteBouton = document.getElementById('btnText');
+              const spinner = document.getElementById('btnSpinner');
+
+              // Animation de chargement sur le bouton
+              bouton.disabled = true;
+              texteBouton.classList.add('hidden');
+              spinner.classList.remove('hidden');
+
+              // Envoi des données en arrière-plan via AJAX
+              fetch(form.action, {
+                method: form.method,
+                body: new FormData(form),
+                headers: {
+                    'Accept': 'application/json'
+                }
+              }).then(response => {
+                if (response.ok) {
+                  // Affiche le message de succès personnalisé
+                  document.getElementById('successMessage').classList.remove('hidden');
+                } else {
+                  alert("Oops! Un problème est survenu lors de l'envoi.");
+                }
+                // Remet le bouton à son état normal
+                bouton.disabled = false;
+                texteBouton.classList.remove('hidden');
+                spinner.classList.add('hidden');
+              }).catch(error => {
+                alert("Erreur de connexion. Veuillez réessayer.");
+                bouton.disabled = false;
+                texteBouton.classList.remove('hidden');
+                spinner.classList.add('hidden');
+              });
+            }}
+            action="https://formsubmit.co/moustafafazeleabas@gmail.com" 
+            method="POST" 
+            className="space-y-6"
+          >
             
             <input type="hidden" name="_subject" value="Nouvelle demande de réservation - Hôtel B52" />
             <input type="hidden" name="_captcha" value="false" />
@@ -224,7 +287,7 @@ export default function HotelVitrine() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Nom Complet</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Nom Complet *</label>
                 <input 
                   type="text" 
                   name="Nom" 
@@ -234,31 +297,30 @@ export default function HotelVitrine() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Téléphone</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Adresse E-mail *</label>
                 <input 
-                  type="tel" 
-                  name="Telephone" 
+                  type="email" 
+                  name="email" 
                   required 
                   className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all font-medium text-gray-900"
-                  placeholder="Numéro de contact"
+                  placeholder="votre.email@exemple.com"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Adresse E-mail</label>
+              <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Téléphone / WhatsApp (Facultatif)</label>
               <input 
-                type="email" 
-                name="email" 
-                required 
+                type="tel" 
+                name="Telephone" 
                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all font-medium text-gray-900"
-                placeholder="votre.email@exemple.com"
+                placeholder="Ex: +261 34 00 000 00"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Date d'arrivée</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Date d'arrivée *</label>
                 <input 
                   type="date" 
                   name="Date_Arrivee" 
@@ -267,7 +329,7 @@ export default function HotelVitrine() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Date de départ</label>
+                <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Date de départ *</label>
                 <input 
                   type="date" 
                   name="Date_Depart" 
@@ -278,7 +340,7 @@ export default function HotelVitrine() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Précisions (Type de chambre, lit supplémentaire...)</label>
+              <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Précisions (Type de chambre, lit supplémentaire...) *</label>
               <textarea 
                 name="Message" 
                 rows="4" 
@@ -289,10 +351,15 @@ export default function HotelVitrine() {
             </div>
 
             <button 
+              id="submitBtn"
               type="submit"
-              className="w-full bg-orange-500 text-white font-black uppercase tracking-widest py-4 rounded-xl hover:bg-gray-900 transition-colors shadow-md"
+              className="w-full bg-orange-500 text-white font-black uppercase tracking-widest py-4 rounded-xl hover:bg-gray-900 transition-colors shadow-md flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Envoyer la demande
+              <span id="btnText">Envoyer la demande</span>
+              <svg id="btnSpinner" className="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
             </button>
           </form>
         </div>
